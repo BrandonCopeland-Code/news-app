@@ -14,33 +14,55 @@ async function fetchNews() {
 
 function displayNews(articles) {
     const newsDiv = document.getElementById("news");
+    newsDiv.className = 'row';
+
     for (const article of articles) {
-        const articleDiv = document.createElement("div");
+        // Column wrapper
+        const col = document.createElement("div");
+        col.className = 'col-md-6 col-lg-4 mb-4 d-flex';
 
-        //title
-        const title = document.createElement("h4");
+        // Bootstrap card
+        const card = document.createElement("div");
+        card.className = 'card h-100';
+
+        // Image
+        if (article.urlToImage) {
+            const image = document.createElement("img");
+            image.src = article.urlToImage;
+            image.classList.add("card-img-top");
+            card.appendChild(image);
+        }
+
+        // Card body
+        const cardBody = document.createElement("div");
+        cardBody.className = 'card-body d-flex flex-column';
+
+        // Title
+        const title = document.createElement("h5");
         title.textContent = article.title;
-        articleDiv.appendChild(title);
+        title.className = "card-title";
+        cardBody.appendChild(title);
 
-        //description
+        // Description
         const description = document.createElement("p");
-        description.textContent = article.description;
-        articleDiv.appendChild(description);
+        description.textContent = article.description || '';
+        description.classList.add("card-text");
+        cardBody.appendChild(description);
 
-        //image
-        const image = document.createElement("img");
-        image.src = article.urlToImage;
-        articleDiv.appendChild(image);
-
-        //url
+        // Button
         const urlNews = document.createElement("a");
         urlNews.href = article.url;
+        urlNews.target = '_blank';
+        urlNews.classList.add("btn", "btn-primary", "mt-auto");
         urlNews.textContent = "Read the full article";
-        articleDiv.appendChild(urlNews);
+        cardBody.appendChild(urlNews);
 
-        //append div
-        newsDiv.appendChild(articleDiv);
+        // Assemble card
+        card.appendChild(cardBody);
+        col.appendChild(card);
+        newsDiv.appendChild(col);
     }
 }
+
 
 fetchNews();
